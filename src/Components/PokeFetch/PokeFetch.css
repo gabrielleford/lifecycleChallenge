@@ -32,6 +32,14 @@
   width: 500px;
 }
 
+.pokeImgHidden {
+  filter: brightness(0%)
+}
+
+.pokeImgShow {
+  filter: brightness(100%);
+}
+
 .pokeName {
   font-family: 'Press Start 2P', cursive;
   text-transform: uppercase;

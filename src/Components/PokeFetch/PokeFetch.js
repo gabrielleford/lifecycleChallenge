@@ -10,6 +10,10 @@ class PokeFetch extends Component {
       pokeSprite: '',
       pokeName: '',
     }
+
+    this.state = {
+      timer: 10
+    }
   }
 
   fetchPokemon() {
@@ -27,16 +31,40 @@ class PokeFetch extends Component {
         })
       })
       .catch((err) => console.log(err))
+
+      this.interval = setInterval(
+        () =>
+          this.setState({
+            timer: this.state.timer - 1,
+          }),
+        1000
+      );
+
+      if (this.state.timer === 0) {
+        this.setState({
+          timer: 10
+        })
+      }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.timer === 1) {
+      clearInterval(this.interval);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
   }
 
   render() {
     return (
       <div className={'wrapper'}>
         <button className={'start'} onClick={() => this.fetchPokemon()}>Start!</button>
-        <h1 className={'timer'} >Timer Display</h1>
+        {this.state.pokeSprite && <h1 className={'timer'} >{this.state.timer}</h1>}
         <div className={'pokeWrap'}>
-          <img className={'pokeImg'} src={this.state.pokeSprite} />
-          <h1 className={'pokeName'}>{this.state.pokeName}</h1>
+          {this.state.timer === 0 ? <img className={'pokeImg pokeImgShow'} src={this.state.pokeSprite} /> : <img className={'pokeImg pokeImgHidden'} src={this.state.pokeSprite} />}
+          {this.state.timer === 0 && <h1 className={'pokeName'}>{this.state.pokeName}</h1>}
         </div>
       </div>
     )
